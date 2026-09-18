@@ -116,7 +116,7 @@ export const ministries = [
     title: "Men's Fellowship",
     ages: 'All Fathers',
     image: image_men,
-    description: 'Weekly breakfast meetups focused on accountability, mentorship, and growing in faith together.',
+    description: 'Monthtly gatherings of Church men for small food or coffee fellowship to promote relationship building and encouragement.',
   },
   {
     title: 'Music Ministry',
