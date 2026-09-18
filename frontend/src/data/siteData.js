@@ -7,7 +7,7 @@ export const church = {
   shortName: 'HBC',
   tagline: 'Faith, Family, Friends',
   address: 'South Spring Villas, Bucal, Calamba, Laguna',
-  phone: '(049) 555-0182',
+  phone: '+63 948 442 7365',
   email: 'anjotongol17@gmail.com',
 }
 
@@ -27,8 +27,6 @@ export const navLinks = [
 ]
 
 import hbcAboutImage from '../assets/hbc_asset_about.jpg';
-//export const heroImage = 'https://picsum.photos/seed/church-hero/1600/900'
-
 export const hbcHeroImage = 'assets/HBC 14 YEARS.jpg';
 
 export const aboutStory = {
@@ -45,77 +43,109 @@ export const beliefs = [
     text: 'We believe God meets people exactly where they are, not where they think they should be.',
   },
   {
-    title: 'Scripture-Rooted',
+    title: 'KJV Scripture-Rooted',
     text: 'The Bible shapes how we teach, live, and love — it is our compass, not just our textbook.',
   },
   {
     title: 'Community Matters',
-    text: 'Faith grows best in relationship. We are built around small groups, not just Sunday rows.',
+    text: 'Faith grows best in relationship. We are built around small groups like youth and juniors, not just Sunday rows.',
   },
   {
-    title: 'Serving Our City',
-    text: 'We show up for our neighbors through food drives, tutoring, and everyday acts of care.',
+    title: 'Serving and seeking',
+    text: 'We show up for our neighbors through soul winning, children ministry, and everyday acts of care.',
   },
 ]
 
+import image_pastor from '../assets/hbc_pastor.jpg';
+import image_pastor_wife from '../assets/hbc_pastor_wife.jpg';
+import image_youth_head from '../assets/hbc_youth_head.jpg';
+import image_multimedia from '../assets/hbc_multimedia.jpg';
 export const staff = [
   {
-    name: 'Pastor Daniel Reyes',
-    role: 'Lead Pastor',
-    image: 'https://picsum.photos/seed/pastor-daniel/400/400',
+    name: 'Anjo Tongol',
+    role: 'Pastor',
+    //image: 'https://picsum.photos/seed/pastor-daniel/400/400',
+    image: image_pastor,
   },
   {
-    name: 'Pastor Maria Santos',
-    role: 'Associate Pastor',
-    image: 'https://picsum.photos/seed/pastor-maria/400/400',
+    name: 'Eunice Balbutan Tongol',
+    role: 'Pastor\'s Wife',
+    image: image_pastor_wife,
   },
   {
-    name: 'James Cruz',
-    role: 'Worship Director',
-    image: 'https://picsum.photos/seed/james-worship/400/400',
+    name: 'Airish Pilapil',
+    role: 'Youth Head',
+    image: image_youth_head,
   },
   {
-    name: 'Anna Lim',
-    role: 'Youth & Family Ministry',
-    image: 'https://picsum.photos/seed/anna-youth/400/400',
-  },
+    name: 'Marc David',
+    role: 'Multimedia & Worship',
+    image: image_multimedia,
+  }
 ]
 
+import image_primary_juniors from '../assets/hbc_primary_juniors.jpg';
+import image_youth from '../assets/hbc_youth.jpg';
+import image_mothers_fellowship from '../assets/hbc_mothers_fellowship.jpg';
+import image_men from '../assets/hbc_men.jpg';
+import image_music_ministry from '../assets/hbc_music_ministry.jpg';
+import image_children from '../assets/hbc_children.jpg';
+import image_soulwinning from '../assets/hbc_soulwinning.jpg';
+import image_choir from '../assets/hbc_choir.jpg';
+import image_biblestudy from '../assets/hbc_bible_study.jpg';
 export const ministries = [
   {
-    title: 'Kids Ministry',
-    ages: 'Ages 3–11',
-    image: 'https://picsum.photos/seed/kids-ministry/700/500',
-    description: 'A safe, joyful space where kids learn Bible stories through songs, games, and crafts every Sunday.',
+    title: 'Primary - Juniors',
+    ages: 'Ages 4–12',
+    image: image_primary_juniors,
+    description: 'A safe, joyful space where kids learn Bible stories through songs, games, and crafts.',
   },
   {
-    title: 'Youth Group',
-    ages: 'Grades 7–12',
-    image: 'https://picsum.photos/seed/youth-group/700/500',
-    description: 'Friday nights of honest conversation, worship, and games built for the questions teens are actually asking.',
+    title: 'Youth',
+    ages: 'Grades 7 to young pro',
+    image: image_youth,
+    description: 'Meaningful conversations, heartfelt worship, fun games, and a growing faith that creates a space where young people can connect with God, and build friendships',
   },
   {
     title: "Women's Fellowship",
-    ages: 'All ages',
-    image: 'https://picsum.photos/seed/womens-fellowship/700/500',
-    description: 'Monthly gatherings for encouragement, prayer, and friendship over coffee and conversation.',
+    ages: 'All Mothers',
+    image: image_mothers_fellowship,
+    description: 'Monthly gatherings for encouragement, prayers, and sharing over snacks and conversation.',
   },
   {
-    title: "Men's Ministry",
-    ages: 'All ages',
-    image: 'https://picsum.photos/seed/mens-ministry/700/500',
+    title: "Men's Fellowship",
+    ages: 'All Fathers',
+    image: image_men,
     description: 'Weekly breakfast meetups focused on accountability, mentorship, and growing in faith together.',
   },
   {
-    title: 'Worship Team',
+    title: 'Music Ministry',
     ages: 'Musicians & vocalists',
-    image: 'https://picsum.photos/seed/worship-team/700/500',
+    image: image_music_ministry,
     description: 'Leading our congregation in song each week — auditions open twice a year, all skill levels welcome to inquire.',
   },
   {
-    title: 'Community Outreach',
-    ages: 'Volunteers welcome',
-    image: 'https://picsum.photos/seed/outreach-team/700/500',
+    title: 'Children Ministry',
+    ages: 'Vacation Bible School',
+    image: image_children,
+    description: 'Monthly food drives, school-supply donations, and neighborhood clean-ups throughout the year.',
+  },
+  {
+    title: 'Soul Winning',
+    ages: 'Gospel Tracks Distributions',
+    image: image_soulwinning,
+    description: 'Monthly food drives, school-supply donations, and neighborhood clean-ups throughout the year.',
+  },
+  {
+    title: 'Choir',
+    ages: 'Church members',
+    image: image_choir,
+    description: 'Monthly food drives, school-supply donations, and neighborhood clean-ups throughout the year.',
+  },
+  {
+    title: 'Bible Study',
+    ages: 'Thursday and Friday Nights',
+    image: image_biblestudy,
     description: 'Monthly food drives, school-supply donations, and neighborhood clean-ups throughout the year.',
   },
 ]
