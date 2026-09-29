@@ -12,3 +12,6 @@ backend/*.db
 **/__pycache__/
 *.pyc
 
+
+# Local Claude Code preview config
+.claude/
