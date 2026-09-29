@@ -1,14 +1,12 @@
-# Grace Community Church — Website
+# Harvesters Baptist Church Calamba — Website
 
-A full project scaffold for a church website.
+Static website for Harvesters Baptist Church Calamba — *Faith, Family, Friends*.
+An Old King James Version (KJV) Bible church. Built with React, Vite, Tailwind CSS, and Motion.
+Supports light and dark mode.
 
-```
-church-website/
-├── frontend/     ← React + Tailwind (built now, fully working)
-└── backend/      ← FastAPI + PostgreSQL (scaffolded for later, not wired up yet)
-```
+## Run it locally
 
-## Frontend (ready to run)
+Requires **Node.js 20.19+ or 22.12+**.
 
 ```bash
 cd frontend
@@ -16,36 +14,29 @@ npm install
 npm run dev
 ```
 
-Then open the printed local URL (usually http://localhost:5173).
+Open http://localhost:5173.
 
-To build for production:
+## Build for hosting
 
 ```bash
+cd frontend
 npm run build
 ```
 
-This is a **static** site: all content (service times, staff, events, sermons)
-lives in plain JS data files under `src/data/`, so you can edit copy without
-touching component code. Every photo is a placeholder from picsum.photos —
-swap the URLs in `src/data/*.js` for real photos whenever you have them.
+Upload the contents of `frontend/dist/` to any static host. Configure the host to serve `index.html` for
+all paths (see *Deployment* in [CLAUDE.md](CLAUDE.md)).
 
-## Backend (scaffold only — for later)
+## Updating content
 
-The `backend/` folder is a skeleton FastAPI + PostgreSQL project so the same
-structure can grow into a real API (dynamic events, sermon uploads, a contact
-form that emails the office, etc.) without a rewrite. It is **not connected
-to the frontend yet** — see `backend/README.md`.
+Almost everything on the site is edited in two files, with no component changes needed:
 
-## Color theme
+- `frontend/src/data/siteData.js`: church info, service times, ministries, events, YouTube videos, stats, gallery
+- `frontend/src/data/history.js`: the History page timeline
 
-| Name        | Hex       | Tailwind key      |
-|-------------|-----------|--------------------|
-| Primary Blue| `#4F7CAC` | `primary`          |
-| Soft Blue   | `#DCEAF5` | `softblue`         |
-| Deep Blue   | `#315A7D` | `deepblue`         |
-| Primary Green| `#6FA58A`| `green`            |
-| Soft Green  | `#DDEDE5` | `softgreen`        |
-| Cream       | `#FAF9F4` | `cream`            |
-| Text        | `#263238` | `ink`              |
+Photos live in `frontend/src/assets/`.
 
-All defined in `frontend/tailwind.config.js`.
+## More
+
+See [CLAUDE.md](CLAUDE.md) for the full architecture, design system (colors, dark mode, animations), and
+conventions, including the **Security** section. The `backend/` folder is a secured events API that the
+website doesn't use yet (see [backend/README.md](backend/README.md)).

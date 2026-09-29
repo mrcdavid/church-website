@@ -1,0 +1,15 @@
+# Security headers for the static site.
+# Netlify and Cloudflare Pages read this file automatically; for other hosts,
+# copy these headers into the host's config (see "Security" in CLAUDE.md).
+# `npm run preview` also serves them, so a local build behaves like production.
+#
+# The main Content-Security-Policy is added to index.html at build time
+# (vite.config.js). frame-ancestors only works as a real header, so it is here.
+/*
+  Content-Security-Policy: frame-ancestors 'none'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=63072000; includeSubDomains

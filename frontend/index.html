@@ -2,15 +2,39 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Harvesters Baptist Church Calamba</title>
-    <meta name="description" content="Harvesters Baptist Church Calamba — a welcoming family of faith. Join us Sundays for worship, community, and hope." />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet">
+    <meta
+      name="description"
+      content="Harvesters Baptist Church Calamba — Faith, Family, Friends. 14 years of growing forward in Bucal, Calamba, Laguna. An Old King James Version (KJV) Bible church. Join us Sundays for Sunday School and worship."
+    />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#F2EDE4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1E1E1E" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Harvesters Baptist Church Calamba" />
+    <meta property="og:description" content="An Old King James Version (KJV) Bible church. Faith, Family, Friends — a growing church family in Bucal, Calamba, Laguna." />
+    <link rel="icon" href="/images/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Apply the saved (or system) theme before first paint to avoid a flash. -->
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('hbc-theme');
+          var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-cream text-ink">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

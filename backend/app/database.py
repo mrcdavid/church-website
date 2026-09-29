@@ -1,23 +1,29 @@
 """
-SQLAlchemy engine/session setup — placeholder for future PostgreSQL wiring.
-Not imported by main.py yet.
+SQLAlchemy engine/session setup. The database URL comes from settings
+(the DATABASE_URL environment variable). No credentials live in code.
 """
-import os
+from fastapi import Request
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-
-DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://church_user:church_password@localhost:5432/church_db",
-)
-
-engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-Base = declarative_base()
+from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.pool import StaticPool
 
 
-def get_db():
-    db = SessionLocal()
+class Base(DeclarativeBase):
+    pass
+
+
+def create_session_factory(database_url: str):
+    options = {"pool_pre_ping": True}
+    if database_url.startswith("sqlite"):
+        options = {"connect_args": {"check_same_thread": False}}
+        if database_url in ("sqlite://", "sqlite:///:memory:"):
+            options["poolclass"] = StaticPool  # one shared in-memory DB (tests)
+    engine = create_engine(database_url, **options)
+    return engine, sessionmaker(bind=engine, autoflush=False, expire_on_commit=False)
+
+
+def get_db(request: Request):
+    db = request.app.state.session_factory()
     try:
         yield db
     finally:
