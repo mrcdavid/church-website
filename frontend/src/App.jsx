@@ -3,9 +3,11 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar.jsx'
 import Footer from './components/Footer.jsx'
 import BackToTop from './components/BackToTop.jsx'
+import ErrorBoundary from './components/ErrorBoundary.jsx'
 import { ease } from './components/Reveal.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
 import { PlanVisitProvider } from './context/PlanVisitContext.jsx'
+import { pagePaths, redirects } from './routes.js'
 import Home from './pages/Home.jsx'
 import About from './pages/About.jsx'
 import History from './pages/History.jsx'
@@ -14,6 +16,21 @@ import Events from './pages/Events.jsx'
 import Watch from './pages/Watch.jsx'
 import Contact from './pages/Contact.jsx'
 import NotFound from './pages/NotFound.jsx'
+import ErrorPage from './pages/ErrorPage.jsx'
+
+// One component per path in routes.js (which also tells the host which URLs are real pages).
+const pages = {
+  '/': Home,
+  '/about': About,
+  '/history': History,
+  '/ministries': Ministries,
+  '/events': Events,
+  '/watch': Watch,
+  '/contact': Contact,
+}
+for (const path of pagePaths) {
+  if (!pages[path]) throw new Error(`routes.js lists ${path}, but App.jsx has no page for it.`)
+}
 
 export default function App() {
   const location = useLocation()
@@ -36,17 +53,19 @@ export default function App() {
                   exit={{ opacity: 0, y: -16 }}
                   transition={{ duration: 0.45, ease }}
                 >
-                  <Routes location={location}>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/history" element={<History />} />
-                    <Route path="/ministries" element={<Ministries />} />
-                    <Route path="/events" element={<Events />} />
-                    <Route path="/watch" element={<Watch />} />
-                    <Route path="/sermons" element={<Navigate to="/watch" replace />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
+                  {/* A crashing page shows ErrorPage; navigating away (new key above) resets it. */}
+                  <ErrorBoundary fallback={(error) => <ErrorPage error={error} />}>
+                    <Routes location={location}>
+                      {pagePaths.map((path) => {
+                        const Page = pages[path]
+                        return <Route key={path} path={path} element={<Page />} caseSensitive />
+                      })}
+                      {Object.entries(redirects).map(([from, to]) => (
+                        <Route key={from} path={from} element={<Navigate to={to} replace />} caseSensitive />
+                      ))}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </ErrorBoundary>
                 </motion.div>
               </AnimatePresence>
             </main>

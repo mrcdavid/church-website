@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { ArrowUpRight, BookOpen, Mail, MapPin, Navigation, Phone } from 'lucide-react'
-import Logo from '../assets/Logo.jsx'
+import Logo from './Logo.jsx'
 import { YoutubeIcon } from './icons.jsx'
 import { bible, church, navLinks, serviceTimes } from '../data/siteData.js'
 import { directionsUrl, mailUrl, telUrl } from '../lib/links.js'
@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="container-page grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12 lg:py-20">
         <div className="lg:col-span-4">
           <Link to="/" className="inline-flex items-center gap-3">
-            <Logo className="h-11 w-11 text-linen" />
+            <Logo className="h-12 text-linen" />
             <span className="leading-tight">
               <span className="block font-display text-lg font-semibold">{church.logoTitle}</span>
               <span className="block text-[0.7rem] font-bold uppercase tracking-[0.22em] text-clay-200">

@@ -23,8 +23,9 @@ cd frontend
 npm run build
 ```
 
-Upload the contents of `frontend/dist/` to any static host. Configure the host to serve `index.html` for
-all paths (see *Deployment* in [CLAUDE.md](CLAUDE.md)).
+Upload the contents of `frontend/dist/` to a static host. On Netlify or Cloudflare Pages it works as-is:
+the build includes `_redirects`, `_headers`, and `404.html`, so real pages load and wrong links get a proper
+404 page. For other hosts, see *Deployment* in [CLAUDE.md](CLAUDE.md).
 
 ## Updating content
 

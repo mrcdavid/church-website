@@ -63,20 +63,21 @@ church-website/
 │   ├── vite.config.js         ← build config + Content-Security-Policy plugin
 │   ├── tailwind.config.js     ← brand palette + semantic color tokens
 │   ├── public/_headers        ← security headers for the host (see "Security")
-│   ├── public/images/favicon.svg
+│   ├── public/images/         ← favicon.png (tab icon) + apple-touch-icon.png, made from the church logo
 │   └── src/
 │       ├── main.jsx           ← mounts <App> inside <BrowserRouter>
-│       ├── App.jsx            ← providers, layout, routes, page-transition wrapper
+│       ├── App.jsx            ← providers, layout, routes, page-transition wrapper, error boundary
+│       ├── routes.js          ← the list of real page URLs (also drives the host's 404 rules)
 │       ├── index.css          ← theme CSS variables (light/dark), base + component classes
 │       ├── data/
 │       │   ├── siteData.js    ← ✏️ ALL site content (church info, Bible version, services, ministries, events, videos, stats, gallery)
 │       │   └── history.js     ← ✏️ History page content (milestones, anniversary theme, pastor feature)
-│       ├── pages/             ← one file per route (Home, About, History, Ministries, Events, Watch, Contact, NotFound)
+│       ├── pages/             ← one file per route + NotFound (404) and ErrorPage (crash)
 │       ├── components/        ← reusable UI (see below)
 │       ├── context/           ← ThemeContext (light/dark), PlanVisitContext (global "Plan a Visit" modal)
-│       ├── hooks/             ← useDialog, useLatest, usePageTitle, useScrollPast
+│       ├── hooks/             ← useDialog, useLatest, useNoIndex, usePageTitle, useScrollPast
 │       ├── lib/               ← dates.js (event dates), links.js (Maps/YouTube/tel/mailto URLs), sanitize.js (untrusted input), scrollLock.js
-│       └── assets/            ← photos (hbc_*.jpg) + Logo.jsx
+│       └── assets/            ← photos (hbc_*.jpg) + church-logo.png (the church logo)
 └── backend/                   ← secured FastAPI events API + tests, NOT used by the site yet (see "Backend")
 ```
 
@@ -91,13 +92,19 @@ church-website/
 | `/events` | `Events.jsx` | Weekly gatherings + upcoming events → detail modal (past events hide automatically) |
 | `/watch` | `Watch.jsx` | Auto-updating "latest uploads" YouTube player + curated Preaching / Special Numbers tabs → video modal |
 | `/contact` | `Contact.jsx` | Contact cards, form (opens the visitor's email app), service times, map. `?subject=` pre-fills the subject |
-| `/sermons` | → `/watch` | Redirect for old links |
-| `*` | `NotFound.jsx` | 404 |
+| `/sermons` | → `/watch` | Redirect for old links (`redirects` in `routes.js`) |
+| `*` | `NotFound.jsx` | Any other URL: mistyped, outdated, or tampered. HTTP 404 on the live site (see "Error pages") |
+
+Page URLs are listed once, in `src/routes.js`. App.jsx builds its routes from it, and the build turns it into the
+host's rules. **To add a page:** add the path to `pagePaths`, add the component to `pages` in `App.jsx`, and add a
+`navLinks` entry if it belongs in the menu. Routes are case-sensitive (`/About` is a 404).
 
 ### Key components
 
 | Component | Role |
 |---|---|
+| `Logo` | The church logo (`assets/church-logo.png`, a white leaf with a cross) used as a CSS mask, so it takes the text color: cream over photos, forest/sage on the solid navbar. Size it with a height class (`h-10`) |
+| `ErrorBoundary` | Shows a fallback instead of a blank screen when rendering crashes (`ErrorPage` per page, `FatalError` for the whole app) |
 | `Navbar` | Fixed header. Transparent over the dark page banner, turns solid on scroll. Animated active pill, theme toggle, slide-in mobile drawer |
 | `Footer` | Brand, links, service times, contact, directions |
 | `PageHero` | Dark photo banner used at the top of every inner page (the navbar relies on this) |
@@ -205,7 +212,8 @@ the View Transitions API when available. The Google Maps iframe gets a CSS filte
 
 ## Code conventions
 
-- Function components, hooks, no class components. Default export per component file.
+- Function components, hooks, no class components. Default export per component file. (The only exception is
+  `ErrorBoundary`, because React can only catch render errors in a class.)
 - Import local files **with extensions** (`'./Modal.jsx'`, `'../lib/links.js'`).
 - No semicolons, single quotes, 2-space indent, and trailing commas in multi-line literals (match the existing files).
 - Style with Tailwind utilities. Put truly shared patterns in the `@layer components` block of `index.css`.
@@ -214,6 +222,24 @@ the View Transitions API when available. The Google Maps iframe gets a CSS filte
   `div` with `onClick`.
 - Every page calls `usePageTitle('Page name')` and starts with `<PageHero>` (or the Home hero).
 - Keep copy in `data/`. Don't hard-code church facts inside components.
+
+## Error pages
+
+| Situation | What the visitor sees | HTTP status (live site) |
+|---|---|---|
+| Wrong, mistyped, outdated, or tampered URL | `NotFound.jsx`: "Error 404 · Page not found", the URL they tried (as plain text, shortened), a "Did you mean …?" suggestion for near-misses, Home / Go back buttons, quick links, "Report a broken link" | **404** |
+| A page crashes while rendering | `ErrorPage.jsx`: "Unexpected error · Something went wrong" with Try again / Back to home. Navbar and footer keep working, and navigating away recovers | 200 (the page itself loaded) |
+| The whole app crashes (e.g. the navbar) | `FatalError` in `ErrorBoundary.jsx`: plain fallback screen with Try again / Back to home | 200 |
+| `/sermons` | Redirect to `/watch` | **301** |
+
+Both error pages set a clear title ("Page not found (404)", "Something went wrong") and add
+`<meta name="robots" content="noindex">` (`useNoIndex`) so search engines don't index them. Technical error
+details are shown only in `npm run dev`, never on the live site.
+
+How the real 404 status works: the build (`notFoundPages()` in `vite.config.js`) writes `dist/404.html` (a copy of
+the app) and `dist/_redirects` (generated from `routes.js`: each real page → `/index.html` with 200). The host
+serves `404.html` with status 404 for anything not listed. `npm run preview` follows the same rules, so check
+status codes with `npm run build && npm run preview` and `curl -I http://localhost:4173/some-bad-link`.
 
 ## Security
 
@@ -241,13 +267,18 @@ Rules when changing things:
 
 ## Deployment
 
-`npm run build` outputs static files to `frontend/dist/` (including `_headers`). Because routing is client-side, the host must **serve
-`index.html` for unknown paths**, or deep links like `/history` will 404 on refresh:
+`npm run build` outputs static files to `frontend/dist/`, including `_headers`, `_redirects`, and `404.html`.
+Routing is client-side, so the host must load the app for **real page URLs only** and return `404.html` with a
+404 status for everything else. Don't use a catch-all "serve index.html for every path" rule: that turns every
+bad link into a 200 ("soft 404").
 
-- Netlify: add `frontend/public/_redirects` containing `/*  /index.html  200`
-- Vercel: `vercel.json` with a rewrite of `/(.*)` to `/index.html`
-- GitHub Pages: copy `index.html` to `404.html` after build (or switch to `HashRouter`)
-- Apache: `.htaccess` `FallbackResource /index.html`
+- **Netlify / Cloudflare Pages:** works as-is (they read `_redirects`, `_headers`, and `404.html` automatically).
+- **Vercel:** in `vercel.json`, add a rewrite to `/index.html` for each path in `routes.js` (not `/(.*)`), plus the
+  headers from `_headers`. Vercel serves `404.html` for the rest.
+- **Apache:** `.htaccess` with a `RewriteRule` per page path to `/index.html`, `ErrorDocument 404 /404.html`, and
+  `Header set` lines from `_headers`.
+- **GitHub Pages:** serves `404.html` for missing paths, but with status 404 even for real pages like `/history`
+  (they still display correctly). It also can't set security headers, so prefer another host.
 
 ## Backend (secured, not yet connected)
 
@@ -271,4 +302,5 @@ full security model. The essentials:
 - Don't use raw hex colors in components. Use brand or semantic Tailwind tokens.
 - Don't invent church facts (dates, names, numbers) in copy. Mark unknowns clearly for the church to confirm.
 - Don't commit `node_modules/`, `dist/`, `.env` files, or `backend/*.db`.
+- Don't add a catch-all `/* /index.html 200` rewrite; it hides real 404s. List pages in `routes.js` instead.
 - Don't weaken the CSP, `_headers`, iframe sandboxes, or backend auth to "make something work". Add the specific allowance instead.

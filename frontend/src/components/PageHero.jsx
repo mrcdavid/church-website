@@ -3,7 +3,7 @@ import { ease } from './Reveal.jsx'
 
 // Photo banner at the top of every inner page. Always dark, so the
 // transparent navbar reads well over it in both themes.
-export default function PageHero({ eyebrow, icon: Icon, title, description, image, children }) {
+export default function PageHero({ eyebrow, icon: Icon, title, description, image, watermark, children }) {
   return (
     <section className="relative isolate overflow-hidden bg-forest-900 pb-24 pt-36 sm:pb-32 sm:pt-44">
       {image && (
@@ -17,8 +17,16 @@ export default function PageHero({ eyebrow, icon: Icon, title, description, imag
         />
       )}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-charcoal/85 via-forest-900/75 to-forest-800/60" />
+      {watermark && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-4 right-3 select-none font-display text-[8rem] font-semibold leading-none text-linen/10 sm:right-8 sm:text-[13rem] lg:text-[17rem]"
+        >
+          {watermark}
+        </span>
+      )}
 
-      <div className="container-page">
+      <div className="container-page relative">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'motion/react'
 import { CalendarHeart, MapPin, Menu, X } from 'lucide-react'
-import Logo from '../assets/Logo.jsx'
+import Logo from './Logo.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 import { church, navLinks } from '../data/siteData.js'
 import { usePlanVisit } from '../context/PlanVisitContext.jsx'
@@ -124,7 +124,7 @@ function BrandLink({ solid, onClick }) {
   return (
     <Link to="/" onClick={onClick} className="group flex items-center gap-3">
       <Logo
-        className={`h-9 w-9 shrink-0 transition-all duration-500 ease-smooth group-hover:-rotate-6 sm:h-10 sm:w-10 ${
+        className={`h-10 transition-all duration-500 ease-smooth group-hover:-rotate-6 sm:h-11 ${
           solid ? 'text-primary' : 'text-linen'
         }`}
       />
